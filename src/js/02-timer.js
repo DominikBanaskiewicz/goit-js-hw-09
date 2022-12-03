@@ -6,6 +6,7 @@ const input = document.querySelector('#datetime-picker');
 const startBtn = document.querySelector('button');
 
 let remaningTime = undefined;
+let selectedDate = undefined;
 startBtn.disabled = true;
 
 // adding leading zeros to time
@@ -29,11 +30,14 @@ const options = {
       startBtn.disabled = true;
       //  alert('Please choose a date in the future');
       Notiflix.Notify.failure('Please choose a date in the future');
+      return;
     }
 
-    const d2 = selectedDates[0].getTime();
-    const d1 = Date.now();
-    remaningTime = d2 - d1;
+    // const d2 = selectedDates[0].getTime();
+    // const d1 = Date.now();
+    // remaningTime = d2 - d1;
+    selectedDate = selectedDates[0];
+    return selectedDates[0];
   },
 };
 
@@ -83,7 +87,7 @@ const startInterval = () => {
 
 startBtn.addEventListener('click', () => {
   // disabling date input and btn
-  input.disabled = true;
   startBtn.disabled = true;
+  remaningTime = selectedDate.getTime() - Date.now();
   startInterval();
 });

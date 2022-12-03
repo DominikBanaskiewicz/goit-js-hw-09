@@ -10,12 +10,13 @@ const firstDeleyInput = form.querySelector(':nth-child(1) > input');
 const deleyStepInput = form.querySelector(':nth-child(2) > input');
 const amountInput = form.querySelector(':nth-child(3) > input');
 const createBtn = form.querySelector('button');
-
+let promisesCounter = 0;
+let FinishedPromises = 0;
 function createPromise(position, delay) {
   return new Promise((resolve, reject) => {
     const shouldResolve = Math.random() > 0.3;
-
     setTimeout(() => {
+      FinishedPromises = countFinishedPrmomisesAndDisableBtn(FinishedPromises);
       if (shouldResolve) {
         resolve({ position, delay });
       }
@@ -23,9 +24,19 @@ function createPromise(position, delay) {
     }, delay);
   });
 }
+const countFinishedPrmomisesAndDisableBtn = i => {
+  if (i === promisesCounter - 1) {
+    createBtn.disabled = false;
 
+    return;
+  }
+  return (i = i + 1);
+};
 const onCreateBtnClick = event => {
   event.preventDefault();
+  createBtn.disabled = true;
+  FinishedPromises = 0;
+  promisesCounter = 0;
   const promisesTimeArray = createPromisesTimeArray(
     firstDeleyInput.value,
     deleyStepInput.value,
@@ -52,6 +63,7 @@ const createPromisesTimeArray = (firstDeley, deleyStep, amount) => {
       array[i] = parseInt(deleyStep) * i + parseInt(firstDeley);
     }
   }
+  promisesCounter = array.length;
   return array;
 };
 
